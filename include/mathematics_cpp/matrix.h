@@ -5,27 +5,25 @@
 #define real float
 
 /**
- * Indexing: RxC = [C + R * COLUMNS]
+ * Indexing: ROWSxCOLUMNS = [C + R * COLUMNS]
  */
-template<size_t R, size_t C>
 struct matrix {
-    matrix();
-    explicit matrix(const real *data);
+    matrix(const size_t &rows, const size_t &columns);
+    matrix(const size_t &rows, const size_t &columns, const real *data);
 
     void print() const;
 
-    vector<R> operator*(const vector<C> &other) const;
+    matrix operator*(const matrix &other) const;
 
-    matrix<R, C> set_column(size_t n, const vector<R> &column) const ;
-    matrix<R, C> set_row(size_t n, const vector<C> &row) const;
+    matrix set_column(const size_t &n, const matrix &column) const ;
+    matrix set_row(const size_t &n, const matrix &row) const;
 
-    vector<R> get_column(size_t n) const;
-    vector<C> get_row(size_t n) const;
+    matrix get_column(const size_t &n) const;
+    matrix get_row(const size_t &n) const;
 
-    size_t rows = R;
-    size_t columns = C;
+    size_t rows;
+    size_t columns;
 
-    real data[R * C] {};
+    real data[];
 };
-
 
