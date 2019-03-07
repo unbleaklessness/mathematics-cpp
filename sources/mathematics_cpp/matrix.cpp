@@ -1,76 +1,38 @@
 #include "matrix.h"
 
-#include <stddef.h>
 #include <iostream>
-#include <iomanip>
+#include <matrix.h>
 
-template<size_t R, size_t C>
-matrix<R, C>::matrix() {
-    for (size_t i = 0; i < R * C; i++) {
-        data[i] = 0.0;
+
+matrix::matrix(size_t rows, size_t columns) {
+    for (size_t i = 0; i < rows * columns; i++) {
+
     }
 }
 
-template<size_t R, size_t C>
-matrix<R, C>::matrix(const real *data) {
-    for (size_t i = 0; i < R * C; i++) {
-        this->data[i] = data[i];
-    }
-}
-
-template<size_t R, size_t C>
-vector<R> matrix<R, C>::operator*(const vector<C> &other) const {
-    vector<R> result;
-    for (size_t i = 0; i < R; i++) {
-        for (size_t j = 0; j < C; j++) {
-            result[i] += data[i + j * columns] * other[j];
-        }
-    }
-    return result;
-}
-
-template<size_t R, size_t C>
-void matrix<R, C>::print() const {
-    for (size_t i = 0; i < R; i++) {
-        for (size_t j = 0; j < C; j++) {
-            std::cout << std::fixed  << std::setprecision(4) << data[j + i * C] << "   ";
+void matrix::print() const {
+    for (size_t i = 0; i < rows; i++) {
+        for (size_t j = 0; j < columns; j++) {
+            std::cout << get(i, j) << " ";
         }
         std::cout << std::endl;
     }
 }
 
-template<size_t R, size_t C>
-matrix<R, C> matrix<R, C>::set_column(size_t n, const vector<R> &column) const {
-    matrix<R, C> result(data);
-    for (size_t i = 0; i < R; i++) {
-        result.data[n + i * columns] = column[i];
+matrix matrix::operator*(const matrix &other) const {
+    if (columns != other.rows) {
+        throw std::runtime_error("Matrix multiplication error: wrong matrix dimensions.");
     }
-    return result;
-}
 
-template<size_t R, size_t C>
-matrix<R, C> matrix<R, C>::set_row(size_t n, const vector<C> &row) const {
-    matrix<R, C> result(data);
-    for (size_t i = 0; i < C; i++) {
-        result.data[i + n * columns] = row[i];
-    }
-    return result;
-}
+    matrix result(rows, other.columns);
 
-template<size_t R, size_t C>
-vector<R> matrix<R, C>::get_column(size_t n) const {
-    vector<R> result;
-    for (size_t i = 0; i < R; i++) {
-        result[i] = data[n + i * columns];
+    for (size_t i = 0; i < result.rows; i++) {
+        for (size_t j = 0; j < result.columns; j++) {
+            for (size_t k = 0; k < columns; k++) {
+                result.data[j + i * result.columns] += data[k + i * columns] * other.data[j + k * other.columns];
+            }
+        }
     }
-    return result;
-}
 
-template<size_t R, size_t C>
-vector<C> matrix<R, C>::get_row(size_t n) const {
-    vector<R> result;
-    for (size_t i = 0; i < R; i++) {
-        result[i] = data[i + n * columns];
-    }
     return result;
 }

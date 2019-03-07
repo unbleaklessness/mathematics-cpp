@@ -48,3 +48,4 @@ endif()
 
 add_subdirectory(sources)
 add_subdirectory(tests)
+add_subdirectory(extern/googletest)
