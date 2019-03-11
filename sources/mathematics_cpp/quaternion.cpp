@@ -17,23 +17,23 @@ quaternion::quaternion(const vector<3> &v) {
     this->z = v[2];
 }
 
-matrix<3, 3> quaternion::to_matrix3() const {
+matrix quaternion::to_matrix3() const {
     const real data[9] = {
             w * w + x * x - y * y - z * z, 2 * x * y - 2 * w * z, 2 * x * z + 2 * w * y,
             2 * x * y + 2 * w * z, w * w - x * x + y * y - z * z, 2 * y * z + 2 * w * x,
             2 * x * z - 2 * w * y, 2 * y * z - 2 * w * x, w * w - x * x - y * y + z * z
     };
-    return matrix<3, 3> { data };
+    return matrix(3, 3, data);
 }
 
-matrix<4, 4> quaternion::to_matrix4() const {
+matrix quaternion::to_matrix4() const {
     const real data[16] = {
             w * w + x * x - y * y - z * z, 2 * x * y - 2 * w * z, 2 * x * z + 2 * w * y, 0,
             2 * x * y + 2 * w * z, w * w - x * x + y * y - z * z, 2 * y * z + 2 * w * x, 0,
             2 * x * z - 2 * w * y, 2 * y * z - 2 * w * x, w * w - x * x - y * y + z * z, 0,
             0, 0, 0, 1
     };
-    return matrix<4, 4> { data };
+    return matrix(4, 4, data);
 }
 
 quaternion quaternion::conjugate() const {

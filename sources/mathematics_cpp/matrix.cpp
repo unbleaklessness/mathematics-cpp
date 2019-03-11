@@ -1,12 +1,24 @@
 #include "matrix.h"
 
 #include <iostream>
-#include <matrix.h>
-
 
 matrix::matrix(size_t rows, size_t columns) {
-    for (size_t i = 0; i < rows * columns; i++) {
+    data = new real[rows * columns]();
+    this->rows = rows;
+    this->columns = columns;
+}
 
+matrix::matrix(size_t rows, size_t columns, const real *data) {
+    if (data == nullptr) {
+        throw std::runtime_error("Error from `matrix::matrix`, data array is `nullptr`.");
+    }
+
+    data = new real[rows * columns]();
+    this->rows = rows;
+    this->columns = columns;
+
+    for (size_t i = 0; i < rows * columns; i++) {
+        this->data[i] = data[i];
     }
 }
 
@@ -36,3 +48,34 @@ matrix matrix::operator*(const matrix &other) const {
 
     return result;
 }
+
+matrix matrix::from_std_vector(size_t rows, size_t columns, const std::vector<real> &vector) {
+    if (vector.size() != rows * columns) {
+        throw std::runtime_error("Error in `matrix::from_std_vector`, size of the `std::vector` is not equal `rows * columns`.");
+    }
+
+    auto result = matrix(rows, columns);
+
+    for (size_t i = 0; i < rows * columns; i++) {
+        result.data[i] = vector[i];
+    }
+
+    return result;
+}
+
+bool matrix::operator==(const matrix &other) const {
+    if (rows != other.rows ||
+        columns != other.columns)
+    {
+        return false;
+    }
+
+    for (size_t i = 0; i < rows * columns; i++) {
+        if (data[i] != other.data[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+

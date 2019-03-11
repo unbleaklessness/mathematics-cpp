@@ -11,8 +11,8 @@ struct quaternion {
 
     static quaternion from_euler(const vector<3> &v);
 
-    matrix<3, 3> to_matrix3() const;
-    matrix<4, 4> to_matrix4() const;
+    matrix to_matrix3() const;
+    matrix to_matrix4() const;
 
     vector<3> operator*(const vector<3> &v) const;
     quaternion operator*(const quaternion &other) const;
